@@ -1,4 +1,4 @@
-using System;
+using System.IO;
 using Godot;
 
 public partial class SaveDialog : FileDialog
@@ -13,6 +13,11 @@ public partial class SaveDialog : FileDialog
 
   private void onSave(string path)
   {
+    if (Path.GetExtension(path) != ".pdf")
+    {
+      path += ".pdf";
+    }
+
     exporter.ExportPDF(path);
   }
 }

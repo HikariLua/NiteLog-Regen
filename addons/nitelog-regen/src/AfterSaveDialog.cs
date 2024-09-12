@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using Godot;
 
 public partial class AfterSaveDialog : ConfirmationDialog
@@ -16,6 +17,7 @@ public partial class AfterSaveDialog : ConfirmationDialog
     {
       this.Visible = true;
       filePath = path;
+      this.Title = $"Abrir {Path.GetFileName(path)}?";
     };
   }
 
