@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cvpcwh2dlistn"]
+[gd_scene load_steps=4 format=3 uid="uid://cvpcwh2dlistn"]
 
+[ext_resource type="Script" path="res://addons/nitelog-regen/src/Exporter.cs" id="1_3rs3l"]
 [ext_resource type="Script" path="res://addons/nitelog-regen/src/GeneratePDFButton.cs" id="1_watcb"]
+[ext_resource type="Script" path="res://addons/nitelog-regen/src/AfterSaveDialog.cs" id="3_j2p3c"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -10,7 +12,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="."]
+[node name="Exporter" type="Node" parent="."]
+script = ExtResource("1_3rs3l")
+
+[node name="Button" type="Button" parent="." node_paths=PackedStringArray("exporter")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -26,3 +31,17 @@ grow_vertical = 2
 scale = Vector2(3, 3)
 text = "Generate PDF"
 script = ExtResource("1_watcb")
+exporter = NodePath("../Exporter")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Salvar Arquivo"
+size = Vector2i(303, 180)
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="." node_paths=PackedStringArray("exporter")]
+initial_position = 1
+always_on_top = true
+popup_window = true
+ok_button_text = "Sim"
+cancel_button_text = "Não"
+script = ExtResource("3_j2p3c")
+exporter = NodePath("../Exporter")

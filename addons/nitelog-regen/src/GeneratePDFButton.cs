@@ -2,13 +2,16 @@ using Godot;
 
 public partial class GeneratePDFButton : Button
 {
+  [Export]
+  private Exporter exporter;
+
   public override void _Ready()
   {
-	this.Pressed += Export;
+    this.Pressed += Export;
   }
 
   private void Export()
   {
-	Exporter.ExportPDF();
+    exporter.ExportPDF();
   }
 }

@@ -7,9 +7,12 @@ using QuestPDF.Infrastructure;
 
 public partial class Exporter : Node
 {
+  [Signal]
+  public delegate void SavedEventHandler(string path);
+
   private static Godot.Collections.Array<Dictionary> Data;
 
-  public static void ExportPDF()
+  public void ExportPDF()
   {
     QuestPDF.Settings.License = LicenseType.Community;
 
@@ -57,6 +60,8 @@ public partial class Exporter : Node
         });
       })
       .GeneratePdf("report.pdf");
+
+    EmitSignal(SignalName.Saved, "report.pdf");
   }
 
   static void ComposeTable(IContainer container)
