@@ -12,7 +12,7 @@ public partial class Exporter : Node
 
   private static Godot.Collections.Array<Dictionary> Data;
 
-  public void ExportPDF()
+  public void ExportPDF(string path)
   {
     QuestPDF.Settings.License = LicenseType.Community;
 
@@ -59,9 +59,9 @@ public partial class Exporter : Node
             });
         });
       })
-      .GeneratePdf("report.pdf");
+      .GeneratePdf(path);
 
-    EmitSignal(SignalName.Saved, "report.pdf");
+    EmitSignal(SignalName.Saved, path);
   }
 
   static void ComposeTable(IContainer container)
