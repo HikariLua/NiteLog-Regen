@@ -3,9 +3,6 @@ using Godot;
 public partial class GeneratePDFButton : Button
 {
   [Export]
-  private Exporter exporter;
-
-  [Export]
   private FileDialog saveDialog;
 
   public override void _Ready()

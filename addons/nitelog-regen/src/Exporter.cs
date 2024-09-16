@@ -10,13 +10,12 @@ public partial class Exporter : Node
   [Signal]
   public delegate void SavedEventHandler(string path);
 
-  private static Godot.Collections.Array<Dictionary> Data;
+  [Export]
+  public ReportScreen report;
 
   public void ExportPDF(string path)
   {
     QuestPDF.Settings.License = LicenseType.Community;
-
-    Data = GenerateRandomData();
 
     Document
       .Create(container =>
@@ -39,8 +38,8 @@ public partial class Exporter : Node
                 .FontSize(36)
                 .FontColor("#000000");
 
-              var date1 = Data[0]["date"];
-              var date2 = Data[Data.Count - 1]["date"];
+              var date1 = report.Data[0]["date"];
+              var date2 = report.Data[report.Data.Count - 1]["date"];
               column
                 .Item()
                 .ShowOnce()
@@ -64,7 +63,7 @@ public partial class Exporter : Node
     EmitSignal(SignalName.Saved, path);
   }
 
-  static void ComposeTable(IContainer container)
+  void ComposeTable(IContainer container)
   {
     container.Table(table =>
     {
@@ -84,7 +83,7 @@ public partial class Exporter : Node
       {
         header.Cell().Element(CellStyle).Text("#");
         header.Cell().Element(CellStyle).Text("Nome");
-        header.Cell().Element(CellStyle).AlignRight().Text("Userid");
+        header.Cell().Element(CellStyle).AlignRight().Text("UserID");
         header.Cell().Element(CellStyle).AlignRight().Text("Clockin");
         header.Cell().Element(CellStyle).AlignRight().Text("Clockout");
         header.Cell().Element(CellStyle).AlignRight().Text("Data");
@@ -99,9 +98,9 @@ public partial class Exporter : Node
         }
       });
 
-      foreach (Dictionary item in Data)
+      foreach (Dictionary<string, string> item in report.Data)
       {
-        table.Cell().Element(CellStyle).Text(Data.IndexOf(item) + 1);
+        table.Cell().Element(CellStyle).Text(report.Data.IndexOf(item) + 1);
         table.Cell().Element(CellStyle).Text(item["username"]);
         table.Cell().Element(CellStyle).AlignRight().Text(item["userid"]);
         table.Cell().Element(CellStyle).AlignRight().Text(item["clockin"]);
@@ -113,7 +112,7 @@ public partial class Exporter : Node
           return container
             .BorderBottom(1)
             .BorderColor(
-              (Data.IndexOf(item) % 2 == 0)
+              (report.Data.IndexOf(item) % 2 == 0)
                 ? QuestPDF.Helpers.Colors.Grey.Lighten1
                 : QuestPDF.Helpers.Colors.Grey.Darken1
             )
@@ -121,62 +120,5 @@ public partial class Exporter : Node
         }
       }
     });
-  }
-
-  private static Godot.Collections.Array<Dictionary> GenerateRandomData()
-  {
-    var random = new Random();
-    var dataArray = new Godot.Collections.Array<Dictionary>();
-
-    // Create a list of random usernames
-    string[] usernames =
-    {
-      "Alice",
-      "Bob",
-      "Charlie",
-      "Diana",
-      "Eve",
-      "Frank",
-      "Grace",
-      "Hank",
-      "Ivy",
-      "Jack",
-      "Kara",
-      "Liam",
-      "Mia",
-      "Nina",
-      "Oscar",
-      "Paul",
-      "Quinn",
-      "Ray",
-      "Sara",
-      "Tom",
-      "Uma",
-      "Vince",
-      "Wendy",
-      "Xander",
-      "Yara",
-    };
-
-    for (int i = 0; i < 250; i++)
-    {
-      var dictionary = new Godot.Collections.Dictionary
-      {
-        { "userid", random.Next(1000, 9999).ToString() },
-        { "username", usernames[i % usernames.Length] },
-        { "clockin", $"{random.Next(6, 10):D2}:{random.Next(0, 60):D2}" },
-        { "clockout", $"{random.Next(16, 20):D2}:{random.Next(0, 60):D2}" },
-        {
-          "date",
-          new DateTime(2024, random.Next(1, 13), random.Next(1, 29)).ToString(
-            "yyyy/MM/dd"
-          )
-        },
-      };
-
-      dataArray.Add(dictionary);
-    }
-
-    return dataArray;
   }
 }

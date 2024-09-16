@@ -1,39 +1,64 @@
-[gd_scene load_steps=5 format=3 uid="uid://cvpcwh2dlistn"]
+[gd_scene load_steps=7 format=3 uid="uid://cvpcwh2dlistn"]
 
 [ext_resource type="Script" path="res://addons/nitelog-regen/src/Exporter.cs" id="1_3rs3l"]
+[ext_resource type="Script" path="res://addons/nitelog-regen/src/ReportScreen.cs" id="1_bv0sh"]
 [ext_resource type="Script" path="res://addons/nitelog-regen/src/GeneratePDFButton.cs" id="1_watcb"]
+[ext_resource type="Script" path="res://addons/nitelog-regen/src/Table.cs" id="2_lo6j5"]
 [ext_resource type="Script" path="res://addons/nitelog-regen/src/AfterSaveDialog.cs" id="3_j2p3c"]
 [ext_resource type="Script" path="res://addons/nitelog-regen/src/SaveDialog.cs" id="3_ynu22"]
 
-[node name="Control" type="Control"]
+[node name="DataSheet" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_bv0sh")
 
-[node name="Exporter" type="Node" parent="."]
-script = ExtResource("1_3rs3l")
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -113.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
 
-[node name="Button" type="Button" parent="." node_paths=PackedStringArray("exporter", "saveDialog")]
+[node name="ItemList" type="ItemList" parent="ScrollContainer" node_paths=PackedStringArray("report")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+allow_search = false
+max_text_lines = 2
+auto_height = true
+max_columns = 6
+icon_mode = 0
+script = ExtResource("2_lo6j5")
+report = NodePath("../..")
+
+[node name="Button" type="Button" parent="." node_paths=PackedStringArray("saveDialog")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -169.0
-offset_top = -46.0
-offset_right = -54.0
-offset_bottom = -15.0
+offset_left = -179.0
+offset_top = 275.0
+offset_right = -64.0
+offset_bottom = 306.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(3, 3)
 text = "Generate PDF"
 script = ExtResource("1_watcb")
-exporter = NodePath("../Exporter")
 saveDialog = NodePath("../FileDialog")
+
+[node name="Exporter" type="Node" parent="." node_paths=PackedStringArray("report")]
+script = ExtResource("1_3rs3l")
+report = NodePath("..")
 
 [node name="FileDialog" type="FileDialog" parent="." node_paths=PackedStringArray("exporter")]
 title = "Salvar Arquivo"
